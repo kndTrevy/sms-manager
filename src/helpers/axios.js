@@ -1,12 +1,12 @@
 import axios from "axios";
-import { url, prodUrl } from "../urlConfig";
+import { url, prodUrl, prodUrlTest } from "../urlConfig";
 // import { authConstants } from "../actions/constants";
 // import store from "../store";
 
 const token = localStorage.getItem('token');
 
 export const axiosInstance = axios.create({
-    baseURL: url,
+    baseURL: prodUrlTest,
     headers: {
         Authorization: token ? `Bearer ${token}` : ''
     }

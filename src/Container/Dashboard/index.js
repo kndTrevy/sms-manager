@@ -25,12 +25,9 @@ const Dashboard = () => {
             setCompanies(res.data.companies);
             setUsers(res.data.users);
             setClients(res.data.clients);
-            setSpecificUsers(res.data.users.filter(user=> user.company._id === auth.user.company))
             const { specificClients } = res.data;
-
             localStorage.setItem("Clients", JSON.stringify(specificClients));
 
-            console.log(messages, companies, users, clients, specificClients, specificUsers);
 
         }).catch(error => {
             console.log(error.message);
@@ -161,98 +158,6 @@ const Dashboard = () => {
 
                                         </tbody>
                                     </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-12 col-lg-4 mb-4">
-                            <div className="card border-light shadow-sm">
-                                <div className="card-header border-bottom border-light d-flex justify-content-between">
-                                    <h2 className="h5 mb-0">Team members</h2>
-                                    <Link href="/users" className="btn btn-sm btn-secondary">See all</Link>
-                                </div>
-                                <div className="card-body">
-                                    <ul className="list-group list-group-flush list my--3">
-                                        {
-                                            specificUsers && specificUsers.map(user => (
-                                                <li className="list-group-item px-0">
-                                                    <div className="row align-items-center">
-                                                        <div className="col-auto">
-                                                            <Link to={`profile/${user._id}`} className="user-avatar">
-                                                                <img className="rounded-circle" alt="Profile placeholder" src={user.profilePicture} />
-                                                            </Link>
-                                                        </div>
-                                                        <div className="col-auto ms--2">
-                                                            <h4 className="h6 mb-0">
-                                                                <Link to={`profile/${user._id}`}>{user.firstName} {user.lastName}</Link>
-                                                            </h4>
-                                                        </div>
-                                                        <div className="col text-right">
-                                                            <Link to={`profile/${user._id}`} className="btn btn-sm btn-tertiary"><i className="fas fa-eye me-1" /> View</Link>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            ))
-                                        }
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-12 col-lg-4 mb-4">
-                            <div className="card border-light shadow-sm">
-                                <div className="card-body">
-                                    <div className="d-flex align-items-center justify-content-between border-bottom border-light pb-3"><div>
-                                        <h6 className="mb-0"><span className="icon icon-xs me-3"><span className="fas fa-globe-europe" /></span>Global Rank</h6>
-                                    </div>
-                                        <div>
-                                            <a href="#" className="text-primary fw-bold">#755<span className="fas fa-chart-line ms-2" /></a>
-                                        </div>
-                                    </div>
-                                    <div className="d-flex align-items-center justify-content-between border-bottom border-light py-3">
-                                        <div>
-                                            <h6 className="mb-0"><span className="icon icon-xs me-3"><span className="fas fa-flag-usa" /></span>Country Rank</h6>
-                                            <div className="small card-stats">United States<span className="icon icon-xs text-success ms-2"><span className="fas fa-angle-up" /></span></div>
-                                        </div>
-                                        <div>
-                                            <a href="#" className="text-primary fw-bold">#32<span className="fas fa-chart-line ms-2" /></a>
-                                        </div>
-                                    </div>
-                                    <div className="d-flex align-items-center justify-content-between pt-3">
-                                        <div>
-                                            <h6 className="mb-0"><span className="icon icon-xs me-3"><span className="fas fa-folder-open" /></span>Category Rank</h6>
-                                            <a href="#" className="small card-stats">Travel &gt; Accomodation</a>
-                                        </div>
-                                        <div>
-                                            <a href="#" className="text-primary fw-bold">#16<span className="fas fa-chart-line ms-2" /></a></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-12 col-lg-4 mb-4">
-                            <div className="card border-light shadow-sm">
-                                <div className="card-body">
-                                    <h2 className="h5">Acquisition</h2>
-                                    <p>Tells you where your visitors originated from, such as search engines, social networks or website referrals.</p>
-                                    <div className="d-block">
-                                        <div className="d-flex align-items-center pt-3 me-5">
-                                            <div className="icon icon-shape icon-sm icon-shape-danger rounded me-3">
-                                                <span className="fas fa-chart-bar" />
-                                            </div>
-                                            <div className="d-block">
-                                                <label className="mb-0">Bounce Rate</label>
-                                                <h4 className="mb-0">33.50%</h4>
-                                            </div>
-                                        </div>
-                                        <div className="d-flex align-items-center pt-3">
-                                            <div className="icon icon-shape icon-sm icon-shape-quaternary rounded me-3">
-                                                <span className="fas fa-chart-area" />
-                                            </div>
-                                            <div className="d-block">
-                                                <label className="mb-0">Sessions</label>
-                                                <h4 className="mb-0">9,567</h4>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

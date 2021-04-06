@@ -137,7 +137,7 @@ const Company = () => {
                                 </td>
                                 <td>
                                     <span className="fw-normal">
-                                        <span className="fas fa-check-circle text-success me-2" />{JSON.parse(localStorage.getItem('Clients')).length}
+                                        <span className="fas fa-check-circle text-success me-2" />{0}
                                     </span>
                                 </td>
                                 <td>

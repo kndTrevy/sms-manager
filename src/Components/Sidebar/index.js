@@ -88,7 +88,7 @@ const Sidebar = () => {
                                 </Link>
                             </li>
                             {
-                                auth.user.role === "admin" ? (
+                                auth.user.role === "customer" ? null : (
                                     <li className="nav-item">
                                         <Link to="/company" className="nav-link">
                                             <span className="sidebar-icon">
@@ -97,7 +97,7 @@ const Sidebar = () => {
                                             <span className="sidebar-text">Companies List</span>
                                         </Link>
                                     </li>
-                                ) : null
+                                )
                             }
 
                         </div>
