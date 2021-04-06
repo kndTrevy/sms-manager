@@ -1,15 +1,12 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { axiosInstance as axios } from "../../helpers/axios";
-import background from "../../assets/img/profile-cover.jpg";
 import { toast, ToastContainer } from "react-toastify";
 import avatar from "../../assets/img/team/profile-picture-3.jpg";
 
-const ProfilePage = (props) => {
-    const auth = useSelector(state => state.auth);
-    const [profile, setProfile] = React.useState(null)
+const CreateUser = (props) => {
 
-    const { _id } = props.match.params;
+    const auth = useSelector(state => state.auth);
 
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
@@ -20,10 +17,18 @@ const ProfilePage = (props) => {
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [contactNumber, setContactNumber] = React.useState(null);
+    const [password, setPassword] = React.useState("");
+    const [retypePass, setRetypePass] = React.useState("");
 
-    const onSubmitChange = (e) => {
+    const submitUser = (e) => {
         e.preventDefault();
+
         const form = new FormData();
+
+        const company = auth.user.company;
+
+        console.log(company);
+
         firstName && form.append("firstName", firstName)
         lastName && form.append("lastName", lastName)
         email && form.append("email", email)
@@ -32,41 +37,32 @@ const ProfilePage = (props) => {
         profilePicture && form.append("profilePicture", profilePicture)
         title && form.append("title", title)
         description && form.append("description", description)
-        contactNumber && form.append("contactNumber", contactNumber)
+        contactNumber && form.append("contactNumber", contactNumber);
+        form.append("company", company);
+        form.append('password', password)
 
-        axios.post('/user/updateProfile', form).then(res => {
-            toast.success(res.data.message)
-            setProfile(res.data.updatedValues)
-        }).catch(err => {
-            toast.error(err.message)
-        })
+        if (props.location.search.split("?")[1].split("=")[1] === "client") {
+            axios.post('/create/client', form).then(result => {
+                toast.sucess(result.Message)
+            }).catch(error => {
+                toast.error(error.message)
+            })
+        } else {
+            axios.post(`/user/signup?role=${props.location.search.split("?")[1].split("=")[1]}`, form).then(result => {
+                toast.sucess(result.Message)
+            }).catch(error => {
+                toast.error(error.message)
+            })
+        }
+
     }
-
-    React.useEffect(() => {
-        axios.get(`/get/user/${_id}`).then(result => {
-
-            setFirstName("");
-            setLastName("");
-            setEmail("");
-            setRole("");
-            setUsername("");
-            setProfilePicture(null);
-            setDescription("");
-            setContactNumber("");
-            
-            setProfile(result.data.user)
-        }).catch(error => {
-            toast.error(error.message)
-        })
-    }, [])
-
     return (
         <div className="row">
             <ToastContainer />
             <div className="col-12 col-xl-8">
                 <div className="card card-body shadow-sm mb-4">
                     <h2 className="h5 mb-4">General information</h2>
-                    <form onSubmit={onSubmitChange}>
+                    <form onSubmit={submitUser}>
                         <div className="row">
                             <div className="col-md-6 mb-3">
                                 <div>
@@ -97,14 +93,34 @@ const ProfilePage = (props) => {
                                         onChange={(e) => setEmail(e.target.value)} type="email" placeholder="name@company.com" required />
                                 </div>
                             </div>
-                            <div className="col-md-6 mb-3"><div className="form-group">
-                                <label htmlFor="phone">Phone</label>
-                                <input className="form-control"
-                                    value={contactNumber}
-                                    onChange={(e) => setContactNumber(e.target.value)}
-                                    id="phone" type="number" placeholder="+12-345 678 910" required />
-                            </div>
-                            </div>
+                            {
+
+                                props.location.search.split("?")[1].split("=")[1] === "client" ? (
+                                    <div className="col-md-6 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="phone">Phone</label>
+                                            <input className="form-control"
+                                                value={contactNumber}
+                                                onChange={(e) => setContactNumber(e.target.value)}
+                                                id="phone" type="number" placeholder="+12-345 678 910" />
+                                        </div>
+                                    </div>
+
+                                ) : (
+                                    <div className="col-md-6 mb-3">
+                                        <div className="form-group">
+                                            <label htmlFor="phone">Phone</label>
+                                            <input className="form-control"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                id="phone" type="number" placeholder="Your password here" />
+                                        </div>
+                                    </div>
+                                )
+                            }
+
+
+
                         </div>
                         <h2 className="h5 my-4">Location</h2>
                         <div className="row">
@@ -114,7 +130,7 @@ const ProfilePage = (props) => {
                                     <input className="form-control"
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
-                                        id="title" type="text" placeholder="Enter your post" required />
+                                        id="title" type="text" placeholder="Enter your post" />
                                 </div>
                             </div>
                             <div className="col-sm-9 mb-3">
@@ -123,7 +139,7 @@ const ProfilePage = (props) => {
                                     <textarea className="form-control" id="description"
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
-                                        placeholder="Je suis developpeur web et mobile" required />
+                                        placeholder="Je suis developpeur web et mobile" />
                                 </div>
                             </div>
                         </div>
@@ -145,7 +161,7 @@ const ProfilePage = (props) => {
                                     <input className="form-control"
                                         value={username}
                                         onChange={(e) => setUsername(e.target.value)}
-                                        id="username" type="text" placeholder="Username" required />
+                                        id="username" type="text" placeholder="Username" />
                                 </div>
                             </div>
                         </div>
@@ -154,61 +170,9 @@ const ProfilePage = (props) => {
                         </div>
                     </form>
                 </div>
-                <div className="card card-body shadow-sm mb-4 mb-lg-0">
-                    <h2 className="h5 mb-4">Alerts &amp; Notifications</h2>
-                    <ul className="list-group list-group-flush">
-                        <li className="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
-                            <div>
-                                <h3 className="h6 mb-1">Company News</h3>
-                                <p className="small pe-4">Get Rocket news, announcements, and product updates</p>
-                            </div>
-                            <div>
-                                <div className="form-check form-switch">
-                                    <input className="form-check-input" type="checkbox" id="user-notification-1" />
-                                    <label className="form-check-label" htmlFor="user-notification-1" />
-                                </div>
-                            </div>
-                        </li>
-                        <li className="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
-                            <div>
-                                <h3 className="h6 mb-1">Account Activity</h3>
-                                <p className="small pe-4">Get important notifications about you or activity you've missed</p>
-                            </div>
-                            <div>
-                                <div className="form-check form-switch">
-                                    <input className="form-check-input" type="checkbox" id="user-notification-2" defaultChecked="checked" />
-                                    <label className="form-check-label" htmlFor="user-notification-2" />
-                                </div>
-                            </div>
-                        </li>
-                        <li className="list-group-item d-flex align-items-center justify-content-between px-0">
-                            <div>
-                                <h3 className="h6 mb-1">Meetups Near You</h3>
-                                <p className="small pe-4">Get an email when a Dribbble Meetup is posted close to my location</p>
-                            </div>
-                            <div>
-                                <div className="form-check form-switch">
-                                    <input className="form-check-input" type="checkbox" id="user-notification-3" defaultChecked="checked" />
-                                    <label className="form-check-label" htmlFor="user-notification-3" />
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
             </div>
             <div className="col-12 col-xl-4">
                 <div className="row">
-                    <div className="col-12 mb-4">
-                        <div className="card shadow-sm text-center p-0">
-                            <div className="profile-cover rounded-top" data-background={background} />
-                            <div className="card-body pb-5">
-                                <img src={profile && profile.profilePicture} className="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait" />
-                                <h4 className="h3">{profile && profile.firstName} {profile && profile.lastName}</h4>
-                                <h5 className="fw-normal">{profile && profile.title}</h5>
-                                <p className="text-gray mb-4">{profile && profile.role}</p>
-                            </div>
-                        </div>
-                    </div>
                     <div className="col-12">
                         <div className="card card-body shadow-sm mb-4">
                             <h2 className="h5 mb-4">Select profile photo</h2>
@@ -242,4 +206,4 @@ const ProfilePage = (props) => {
     )
 }
 
-export default ProfilePage
+export default CreateUser

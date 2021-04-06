@@ -126,7 +126,7 @@ const Company = () => {
                                 </td>
                                 <td>
                                     <a href="#" className="d-flex align-items-center">
-                                        <img src={auth.user && auth.user.profilePicture} className="user-avatar rounded-circle me-3" alt="Avatar" />
+                                        <img src={company.image} className="user-avatar rounded-circle me-3" alt="Avatar" />
                                         <div className="d-block">
                                             <span className="fw-bold">{company.company}</span>
                                         </div>
@@ -137,7 +137,7 @@ const Company = () => {
                                 </td>
                                 <td>
                                     <span className="fw-normal">
-                                        <span className="fas fa-check-circle text-success me-2" />500
+                                        <span className="fas fa-check-circle text-success me-2" />{JSON.parse(localStorage.getItem('Clients')).length}
                                     </span>
                                 </td>
                                 <td>

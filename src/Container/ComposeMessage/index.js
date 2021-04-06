@@ -1,16 +1,48 @@
 import React from 'react';
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { axiosInstance as axios } from "../../helpers/axios";
+import { toast, ToastContainer } from "react-toastify";
 
 const ComposeMessage = () => {
+
+    const auth = useSelector(state => state.auth);
+
+    const [message, setMessage] = React.useState("");
+    const [sentTime, setSentTime] = React.useState("");
+    const [sentDay, setSentDay] = React.useState("");
+    const [clients, setClients] = React.useState("");
+
+    const submitMessage = (e) => {
+        e.preventDefault();
+
+        let timeToWait = Date.parse(`${sentDay} ${sentTime}`) / 1000;
+        const clients = localStorage.getItem("Clients")
+
+        const form = {
+            message, from: auth.user.company, timeToWait, clients
+        }
+
+        console.log(form);
+
+        axios.post('/create/message', form).then(result => {
+            toast.sucess(result.Message);
+        }).catch(error => {
+            toast.error(error.message);
+        })
+
+    }
+
     return (
         <div className="row justify-content-center mt-3">
+            <ToastContainer />
             <div className="col-12 d-flex justify-content-between flex-column flex-sm-row">
                 <Link className="fw-bold text-dark hover:underline mb-2 mb-lg-0" to="/message">
                     <span className="fas fa-inbox me-2" />Back to messages
                 </Link>
-                <p className="text-muted fw-normal small">All Messages</p>
             </div>
             <div className="col-12">
+                {/*
                 <div className="card shadow-sm p-4 mb-4">
                     <div className="d-flex justify-content-between align-items-center mb-2">
                         <span className="font-small">
@@ -40,14 +72,29 @@ const ComposeMessage = () => {
                         </div>
                     </div>
                     <p className="m-0">Hi Chris! Thanks a lot for this very useful template. Saved me a lot of time and searches on the internet.</p>
-                </div>
-                <form action="#" className="mt-4">
-                    <textarea className="form-control border border-gray-400 shadow-sm mb-4" id="message" placeholder="Your Message" rows={6} maxLength={1000} required defaultValue={""} />
+    </div> */}
+                <form onSubmit={submitMessage} className="mt-4">
+                    <textarea className="form-control border border-gray-400 shadow-sm mb-4"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        id="message" placeholder="Your Message" rows={6} maxLength={1000} required />
+                    <input className="form-control border border-gray-400 shadow-sm mb-4"
+                        value={sentDay}
+                        onChange={(e) => setSentDay(e.target.value)}
+                        type="date"
+                        id="message" placeholder="Your Message" />
+                    <input className="form-control border border-gray-400 shadow-sm mb-4"
+                        value={sentTime}
+                        onChange={(e) => setSentTime(e.target.value)}
+                        type="time"
+                        id="message" placeholder="Your Message" />
                     <div className="d-flex justify-content-between align-items-center mt-3">
                         <div>
                         </div>
                         <div>
-                            <button type="submit" className="btn btn-secondary text-dark"><span className="fas fa-paper-plane me-2" />Send</button>
+                            <button type="submit" className="btn btn-secondary text-dark">
+                                <span className="fas fa-paper-plane me-2" />Send
+                            </button>
                         </div>
                     </div>
                 </form>

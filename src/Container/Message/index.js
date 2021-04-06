@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { axiosInstance as axios } from "../../helpers/axios";
+import moment from "moment";
 
 const Message = () => {
 
@@ -97,25 +98,22 @@ const Message = () => {
                                     </td>
                                     <td>
                                         <a href="#" className="d-flex align-items-center">
-                                            <img src={auth.user && auth.user.profilePicture} className="user-avatar rounded-circle me-3" alt="Avatar" />
+                                            <img src={message.from.image} className="user-avatar rounded-circle me-3" alt="Avatar" />
                                             <div className="d-block">
-                                                <span className="fw-bold">{message.from}</span>
-                                                <div className="small text-gray">
-                                                    <span className="__cf_email__" data-cfemail="c5acaba3aa85a0bda4a8b5a9a0eba6aaa8">[email&nbsp;protected]</span>
-                                                </div>
+                                                <span className="fw-bold">{message.from.company}</span>
                                             </div>
                                         </a>
                                     </td>
                                     <td>
-                                        <span className="fw-normal">{message.createdAt}</span>
+                                        <span className="fw-normal">{moment(message.createdAt.createdAt).format("LLLL")}</span>
                                     </td>
                                     <td>
                                         <span className="fw-normal">
-                                            <span className="fas fa-check-circle text-success me-2" />Email
-                                </span>
+                                            <span className="fas fa-check-circle text-success me-2" />{JSON.parse(message.clients).length}
+                                        </span>
                                     </td>
                                     <td>
-                                        <span className="fw-normal text-success">{message.contenu}</span>
+                                        <span className="fw-normal text-success">{message.message}</span>
                                     </td>
                                     <td>
                                         <div className="btn-group">

@@ -52,45 +52,20 @@ const Sidebar = () => {
                         <li className="nav-item">
                             <Link to="/" className="nav-link d-flex align-items-center">
                                 <span className="sidebar-icon">
-                                    <img src={logo} height={20} width={20} alt="Volt Logo" />
+                                    <img src={logo} height={20} width={20} alt="Updev Logo" />
                                 </span>
                                 <span className="mt-1 sidebar-text">SMS-MANAGER</span>
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <span className="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-dashboard">
+                            <Link to="/dashbord" className="nav-link d-flex align-items-center justify-content-between">
                                 <span>
                                     <span className="sidebar-icon">
                                         <span className="fas fa-chart-pie" />
                                     </span>
                                     <span className="sidebar-text">Dashboard</span>
                                 </span>
-                                <span className="link-arrow">
-                                    <span className="fas fa-chevron-right" />
-                                </span>
-                            </span>
-                            <div className="multi-level collapse show" role="list" id="submenu-dashboard" aria-expanded="false">
-                                <ul className="flex-column nav">
-                                    <li className="nav-item">
-                                        <Link to="/" className="nav-link">
-                                            <span className="sidebar-text-contracted">O</span>
-                                            <span className="sidebar-text">Overview</span>
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link to="/traffic" className="nav-link">
-                                            <span className="sidebar-text-contracted">T</span>
-                                            <span className="sidebar-text">All Traffic</span>
-                                        </Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        <Link to="/app" className="nav-link">
-                                            <span className="sidebar-text-contracted">P</span>
-                                            <span className="sidebar-text">Product Analysis</span>
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
+                            </Link>
                         </li>
                         <div>
                             <li className="nav-item">
@@ -112,14 +87,19 @@ const Sidebar = () => {
                                     <span className="sidebar-text">Users List</span>
                                 </Link>
                             </li>
-                            <li className="nav-item">
-                                <Link to="/company" className="nav-link">
-                                    <span className="sidebar-icon">
-                                        <span className="fas fa-th" />
-                                    </span>
-                                    <span className="sidebar-text">Companies List</span>
-                                </Link>
-                            </li>
+                            {
+                                auth.user.role === "admin" ? (
+                                    <li className="nav-item">
+                                        <Link to="/company" className="nav-link">
+                                            <span className="sidebar-icon">
+                                                <span className="fas fa-th" />
+                                            </span>
+                                            <span className="sidebar-text">Companies List</span>
+                                        </Link>
+                                    </li>
+                                ) : null
+                            }
+
                         </div>
 
                     </ul>

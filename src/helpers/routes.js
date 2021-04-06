@@ -9,7 +9,7 @@ const Dashboard = React.lazy(() => import('../Container/Dashboard'));
 const HomePage = React.lazy(() => import('../Container/HomePage'));
 const Message = React.lazy(() => import('../Container/Message'));
 const ComposeMessage = React.lazy(() => import('../Container/ComposeMessage'));
-const Settings = React.lazy(() => import('../Container/Settings'));
+const CreateUser = React.lazy(() => import('../Container/CreateUser'));
 const Subscribers = React.lazy(() => import('../Container/Subscribers'));
 const ProfilePage = React.lazy(() => import('../Container/ProfilePage'));
 const Company = React.lazy(() => import('../Container/Company'));
@@ -30,7 +30,7 @@ const routes = [
     { path: '/course/:_id', name: 'Course Content', component: CourseContent },
     { path: '/homePage', name: 'HomePage', component: HomePage },
     { path: '/compose', name: 'Compose Message', component: ComposeMessage },
-    { path: '/settings', name: 'Settings', component: Settings },
+    { path: '/create/user', name: 'CreateUser', component: CreateUser },
     { path: '/subscribers', name: 'Subscribers', component: Subscribers },
     { path: '/message', name: 'Message', component: Message },
     { path: '/company', name: "Company", component: Company },
