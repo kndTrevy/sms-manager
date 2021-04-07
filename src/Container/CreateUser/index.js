@@ -111,11 +111,11 @@ const CreateUser = (props) => {
                                 ) : (
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
-                                            <label htmlFor="phone">Password</label>
+                                            <label htmlFor="password">Password</label>
                                             <input className="form-control"
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
-                                                id="password" type="number" placeholder="Your password here" />
+                                                id="password" type="password" placeholder="Your password here" />
                                         </div>
                                     </div>
                                 )
