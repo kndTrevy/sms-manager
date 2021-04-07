@@ -133,7 +133,7 @@ const CreateUser = (props) => {
                             <div className="col-sm-6">
                                 <div className="form-group">
                                     <label htmlFor="profile">Profile Picture</label>
-                                    <input type="file" id="profile"
+                                    <input className="form-control" type="file" id="profile"
                                         value={profilePicture}
                                         onChange={(e) => setProfilePicture(e.target.files[0])} />
 
