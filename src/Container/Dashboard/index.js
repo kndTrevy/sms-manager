@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { axiosInstance as axios } from "../../helpers/axios";
+import { toast, ToastContainer } from "react-toastify"
 import moment from "moment";
 
 const Dashboard = () => {
@@ -25,12 +26,13 @@ const Dashboard = () => {
             setCompanies(res.data.companies);
             setUsers(res.data.users);
             setClients(res.data.clients);
+            setSpecificUsers(res.data.specificClients)
             const { specificClients } = res.data;
             localStorage.setItem("Clients", JSON.stringify(specificClients));
 
 
         }).catch(error => {
-            console.log(error.message);
+            toast.error(error.message)
         });
     }, [])
 
@@ -49,80 +51,135 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            <div className="row justify-content-md-center">
-                <div className="col-12 col-sm-6 col-xl-4 mb-4">
-                    <div className="card border-light shadow-sm">
-                        <div className="card-body">
-                            <div className="row d-block d-xl-flex align-items-center">
-                                <div className="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
-                                    <div className="icon icon-shape icon-md icon-shape-primary rounded me-4 me-sm-0"><span className="fas fa-chart-line" />
-                                    </div>
-                                    <div className="d-sm-none">
-                                        <h2 className="h5">Companies</h2>
-                                        <h3 className="mb-1">{users && users.filter(user => user.role === "customer").length}</h3>
+
+            {
+                auth.user.role === "admin" ? (
+                    <div className="row justify-content-md-center">
+                        <div className="col-12 col-sm-6 col-xl-4 mb-4">
+                            <div className="card border-light shadow-sm">
+                                <div className="card-body">
+                                    <div className="row d-block d-xl-flex align-items-center">
+                                        <div className="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+                                            <div className="icon icon-shape icon-md icon-shape-primary rounded me-4 me-sm-0"><span className="fas fa-chart-line" />
+                                            </div>
+                                            <div className="d-sm-none">
+                                                <h2 className="h5">Companies</h2>
+                                                <h3 className="mb-1">{companies && companies.length}</h3>
+                                            </div>
+                                        </div>
+                                        <div className="col-12 col-xl-7 px-xl-0">
+                                            <div className="d-none d-sm-block">
+                                                <h2 className="h5">Companies</h2>
+                                                <h3 className="mb-1">{companies && companies.length}</h3>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="col-12 col-xl-7 px-xl-0">
-                                    <div className="d-none d-sm-block">
-                                        <h2 className="h5">Companies</h2>
-                                        <h3 className="mb-1">{users && users.filter(user => user.role === "customer").length}</h3>
+                            </div>
+                        </div>
+
+
+                        <div className="col-12 col-sm-6 col-xl-4 mb-4">
+                            <div className="card border-light shadow-sm">
+                                <div className="card-body">
+                                    <div className="row d-block d-xl-flex align-items-center">
+                                        <div className="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+                                            <div className="icon icon-shape icon-md icon-shape-secondary rounded me-4">
+                                                <span className="fas fa-cash-register" />
+                                            </div>
+                                            <div className="d-sm-none">
+                                                <h2 className="h5">Clients</h2>
+                                                <h3 className="mb-1">{clients && clients.length}</h3>
+                                            </div>
+                                        </div>
+                                        <div className="col-12 col-xl-7 px-xl-0">
+                                            <div className="d-none d-sm-block">
+                                                <h2 className="h5">Clients</h2>
+                                                <h3 className="mb-1">{clients && clients.length}</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-12 col-sm-6 col-xl-4 mb-4">
+                            <div className="card border-light shadow-sm">
+                                <div className="card-body">
+                                    <div className="row d-block d-xl-flex align-items-center">
+                                        <div className="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+                                            <div className="icon icon-shape icon-md icon-shape-secondary rounded me-4">
+                                                <span className="fas fa-cash-register" />
+                                            </div>
+                                            <div className="d-sm-none">
+                                                <h2 className="h5">Messages</h2>
+                                                <h3 className="mb-1">{messages && messages.length}</h3>
+                                            </div>
+                                        </div>
+                                        <div className="col-12 col-xl-7 px-xl-0">
+                                            <div className="d-none d-sm-block">
+                                                <h2 className="h5">Messages</h2>
+                                                <h3 className="mb-1">{messages && messages.length}</h3>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-
-                <div className="col-12 col-sm-6 col-xl-4 mb-4">
-                    <div className="card border-light shadow-sm">
-                        <div className="card-body">
-                            <div className="row d-block d-xl-flex align-items-center">
-                                <div className="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
-                                    <div className="icon icon-shape icon-md icon-shape-secondary rounded me-4">
-                                        <span className="fas fa-cash-register" />
-                                    </div>
-                                    <div className="d-sm-none">
-                                        <h2 className="h5">Clients</h2>
-                                        <h3 className="mb-1">{clients && clients.length}</h3>
+                ) : (
+                    <div className="row justify-content-md-center">
+                        <div className="col-12 col-sm-6 col-xl-4 mb-4">
+                            <div className="card border-light shadow-sm">
+                                <div className="card-body">
+                                    <div className="row d-block d-xl-flex align-items-center">
+                                        <div className="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+                                            <div className="icon icon-shape icon-md icon-shape-primary rounded me-4 me-sm-0"><span className="fas fa-chart-line" />
+                                            </div>
+                                            <div className="d-sm-none">
+                                                <h2 className="h5">Clients</h2>
+                                                <h3 className="mb-1">{specificUsers && specificUsers.length}</h3>
+                                            </div>
+                                        </div>
+                                        <div className="col-12 col-xl-7 px-xl-0">
+                                            <div className="d-none d-sm-block">
+                                                <h2 className="h5">Clients</h2>
+                                                <h3 className="mb-1">{specificUsers && specificUsers.length}</h3>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="col-12 col-xl-7 px-xl-0">
-                                    <div className="d-none d-sm-block">
-                                        <h2 className="h5">Clients</h2>
-                                        <h3 className="mb-1">{clients && clients.length}</h3>
+                            </div>
+                        </div>
+
+                        <div className="col-12 col-sm-6 col-xl-4 mb-4">
+                            <div className="card border-light shadow-sm">
+                                <div className="card-body">
+                                    <div className="row d-block d-xl-flex align-items-center">
+                                        <div className="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+                                            <div className="icon icon-shape icon-md icon-shape-secondary rounded me-4">
+                                                <span className="fas fa-cash-register" />
+                                            </div>
+                                            <div className="d-sm-none">
+                                                <h2 className="h5">Messages</h2>
+                                                <h3 className="mb-1">{messages && messages.filter(message => message.from._id === auth.user.company).length}</h3>
+                                            </div>
+                                        </div>
+                                        <div className="col-12 col-xl-7 px-xl-0">
+                                            <div className="d-none d-sm-block">
+                                                <h2 className="h5">Messages</h2>
+                                                <h3 className="mb-1">{messages && messages.filter(message => message.from._id === auth.user.company).length}</h3>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                )
+            }
 
-                <div className="col-12 col-sm-6 col-xl-4 mb-4">
-                    <div className="card border-light shadow-sm">
-                        <div className="card-body">
-                            <div className="row d-block d-xl-flex align-items-center">
-                                <div className="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
-                                    <div className="icon icon-shape icon-md icon-shape-secondary rounded me-4">
-                                        <span className="fas fa-cash-register" />
-                                    </div>
-                                    <div className="d-sm-none">
-                                        <h2 className="h5">Messages</h2>
-                                        <h3 className="mb-1">{messages && messages.length}</h3>
-                                    </div>
-                                </div>
-                                <div className="col-12 col-xl-7 px-xl-0">
-                                    <div className="d-none d-sm-block">
-                                        <h2 className="h5">Messages</h2>
-                                        <h3 className="mb-1">{messages && messages.length}</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-            </div>
             <div className="row">
                 <div className="col-12 col-xl-12 mb-4">
                     <div className="row">
@@ -137,27 +194,54 @@ const Dashboard = () => {
                                     </div>
                                 </div>
                                 <div className="table-responsive">
-                                    <table className="table align-items-center table-flush">
-                                        <thead className="thead-light">
-                                            <tr>
-                                                <th scope="col">Day</th>
-                                                <th scope="col">Company</th>
-                                                <th scope="col">Message</th>
-                                                <th scope="col">N° Clients</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {messages && messages.map(message => (
-                                                <tr>
-                                                    <th scope="row">{moment(message.createdAt.createdAt).format("LLLL")}</th>
-                                                    <td>{message.from.company}</td>
-                                                    <td>{message.message}</td>
-                                                    <td>{JSON.parse(message.clients).length}</td>
-                                                </tr>
-                                            ))}
+                                    {
+                                        auth.user.role === "admin" ? (
+                                            <table className="table align-items-center table-flush">
+                                                <thead className="thead-light">
+                                                    <tr>
+                                                        <th scope="col">Day</th>
+                                                        <th scope="col">Company</th>
+                                                        <th scope="col">Message</th>
+                                                        <th scope="col">N° Clients</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {messages && messages.map(message => (
+                                                        <tr key={message._id}>
+                                                            <th scope="row">{moment(message.createdAt.createdAt).format("LLLL")}</th>
+                                                            <td>{message.from.company}</td>
+                                                            <td>{message.message}</td>
+                                                            <td>{JSON.parse(message.clients).length}</td>
+                                                        </tr>
+                                                    ))}
 
-                                        </tbody>
-                                    </table>
+                                                </tbody>
+                                            </table>
+                                        ) : (
+                                            <table className="table align-items-center table-flush">
+                                                <thead className="thead-light">
+                                                    <tr>
+                                                        <th scope="col">Day</th>
+                                                        <th scope="col">Company</th>
+                                                        <th scope="col">Message</th>
+                                                        <th scope="col">N° Clients</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {messages && messages.filter(sms => sms.from._id === auth.user.company).map(message => (
+                                                        <tr key={message._id}>
+                                                            <th scope="row">{moment(message.createdAt.createdAt).format("LLLL")}</th>
+                                                            <td>{message.from.company}</td>
+                                                            <td>{message.message}</td>
+                                                            <td>{JSON.parse(message.clients).length}</td>
+                                                        </tr>
+                                                    ))}
+
+                                                </tbody>
+                                            </table>
+                                        )
+                                    }
+
                                 </div>
                             </div>
                         </div>

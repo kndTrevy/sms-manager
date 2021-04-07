@@ -27,7 +27,7 @@ const Message = () => {
                         <ol className="breadcrumb breadcrumb-dark breadcrumb-transparent">
                             <li className="breadcrumb-item">
                                 <a href="#"><span className="fas fa-home" /></a>
-                            </li><li className="breadcrumb-item"><a href="#">Volt</a>
+                            </li><li className="breadcrumb-item"><a href="#">SMS-MANAGER</a>
                             </li><li className="breadcrumb-item active" aria-current="page">Messages</li>
                         </ol>
                     </nav>

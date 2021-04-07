@@ -23,31 +23,38 @@ const CreateUser = (props) => {
     const submitUser = (e) => {
         e.preventDefault();
 
-        const form = new FormData();
-
-        const company = auth.user.company;
-
-        console.log(company);
-
-        firstName && form.append("firstName", firstName)
-        lastName && form.append("lastName", lastName)
-        email && form.append("email", email)
-        role && form.append("role", role)
-        username && form.append("username", username)
-        profilePicture && form.append("profilePicture", profilePicture)
-        title && form.append("title", title)
-        description && form.append("description", description)
-        contactNumber && form.append("contactNumber", contactNumber);
-        form.append("company", company);
-        form.append('password', password)
-
         if (props.location.search.split("?")[1].split("=")[1] === "client") {
+            const form = new FormData();
+
+            const company = auth.user.company;
+
+            firstName && form.append("firstName", firstName)
+            lastName && form.append("lastName", lastName)
+            email && form.append("email", email)
+            contactNumber && form.append("contactNumber", contactNumber);
+            form.append("company", company);
             axios.post('/create/client', form).then(result => {
                 toast.sucess(result.Message)
             }).catch(error => {
                 toast.error(error.message)
             })
         } else {
+            const form = new FormData();
+
+            const company = auth.user.company;
+
+            firstName && form.append("firstName", firstName)
+            lastName && form.append("lastName", lastName)
+            email && form.append("email", email)
+            role && form.append("role", role)
+            username && form.append("username", username)
+            profilePicture && form.append("profilePicture", profilePicture)
+            title && form.append("title", title)
+            description && form.append("description", description)
+            contactNumber && form.append("contactNumber", contactNumber);
+            form.append("company", company);
+            form.append('password', password)
+
             axios.post(`/user/signup?role=${props.location.search.split("?")[1].split("=")[1]}`, form).then(result => {
                 toast.sucess(result.Message)
             }).catch(error => {
@@ -165,42 +172,45 @@ const CreateUser = (props) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="mt-3">
-                            <button type="submit" className="btn btn-dark">Save All</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div className="col-12 col-xl-4">
-                <div className="row">
-                    <div className="col-12">
-                        <div className="card card-body shadow-sm mb-4">
-                            <h2 className="h5 mb-4">Select profile photo</h2>
-                            <div className="d-flex align-items-center">
-                                <div className="me-3">
-                                    <div className="user-avatar xl-avatar">
-                                        <img className="rounded" src={avatar} alt="change avatar" />
-                                    </div>
-                                </div>
-                                <div className="file-field">
-                                    <div className="d-flex justify-content-xl-center ms-xl-3">
-                                        <div className="d-flex">
-                                            <span className="icon icon-md">
-                                                <span className="fas fa-paperclip me-3" />
-                                            </span>
-                                            <input type="file" value={profilePicture} onChange={(e) => setProfilePicture(e.target.files[0])} />
-                                            <div className="d-md-block text-left">
-                                                <div className="fw-normal text-dark mb-1">Choose Image</div>
-                                                <div className="text-gray small">JPG, GIF or PNG. Max size of 800K</div>
+                        <div className="row">
+                            <div className="col-12 col-xl-4">
+                                <div className="row">
+                                    <div className="col-12">
+                                        <div className="card card-body shadow-sm mb-4">
+                                            <h2 className="h5 mb-4">Select profile photo</h2>
+                                            <div className="d-flex align-items-center">
+                                                <div className="me-3">
+                                                    <div className="user-avatar xl-avatar">
+                                                        <img className="rounded" src={avatar} alt="change avatar" />
+                                                    </div>
+                                                </div>
+                                                <div className="file-field">
+                                                    <div className="d-flex justify-content-xl-center ms-xl-3">
+                                                        <div className="d-flex">
+                                                            <span className="icon icon-md">
+                                                                <span className="fas fa-paperclip me-3" />
+                                                            </span>
+                                                            <input type="file" value={profilePicture} onChange={(e) => setProfilePicture(e.target.files[0])} />
+                                                            <div className="d-md-block text-left">
+                                                                <div className="fw-normal text-dark mb-1">Choose Image</div>
+                                                                <div className="text-gray small">JPG, GIF or PNG. Max size of 800K</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        <div className="mt-3">
+                            <button type="submit" className="btn btn-dark">Save All</button>
+                        </div>
+                    </form>
                 </div>
             </div>
+
         </div>
 
     )
