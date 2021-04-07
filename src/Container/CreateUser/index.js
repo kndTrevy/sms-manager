@@ -129,6 +129,17 @@ const CreateUser = (props) => {
 
 
                         </div>
+                        <div className="row">
+                            <div className="col-sm-6">
+                                <div className="form-group">
+                                    <label htmlFor="profile">Profile Picture</label>
+                                    <input type="file" id="profile"
+                                        value={profilePicture}
+                                        onChange={(e) => setProfilePicture(e.target.files[0])} />
+
+                                </div>
+                            </div>
+                        </div>
                         <h2 className="h5 my-4">Location</h2>
                         <div className="row">
                             <div className="col-sm-3 mb-3">
@@ -172,38 +183,7 @@ const CreateUser = (props) => {
                                 </div>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-12 col-xl-4">
-                                <div className="row">
-                                    <div className="col-12">
-                                        <div className="card card-body shadow-sm mb-4">
-                                            <h2 className="h5 mb-4">Select profile photo</h2>
-                                            <div className="d-flex align-items-center">
-                                                <div className="me-3">
-                                                    <div className="user-avatar xl-avatar">
-                                                        <img className="rounded" src={avatar} alt="change avatar" />
-                                                    </div>
-                                                </div>
-                                                <div className="file-field">
-                                                    <div className="d-flex justify-content-xl-center ms-xl-3">
-                                                        <div className="d-flex">
-                                                            <span className="icon icon-md">
-                                                                <span className="fas fa-paperclip me-3" />
-                                                            </span>
-                                                            <input type="file" value={profilePicture} onChange={(e) => setProfilePicture(e.target.files[0])} />
-                                                            <div className="d-md-block text-left">
-                                                                <div className="fw-normal text-dark mb-1">Choose Image</div>
-                                                                <div className="text-gray small">JPG, GIF or PNG. Max size of 800K</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                         <div className="mt-3">
                             <button type="submit" className="btn btn-dark">Save All</button>
                         </div>
