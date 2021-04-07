@@ -20,6 +20,9 @@ const ProfilePage = (props) => {
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [contactNumber, setContactNumber] = React.useState(null);
+    const [currentPass, setCurrentPass] = React.useState('');
+    const [newPass, setNewPass] = React.useState('');
+    const [newPassAgain, setNewPassAgain] = React.useState('');
 
     const onSubmitChange = (e) => {
         e.preventDefault();
@@ -42,6 +45,20 @@ const ProfilePage = (props) => {
         })
     }
 
+    const changePassword = (e) => {
+        e.preventDefault();
+        const form = {
+            password: newPass, email
+        }
+
+        axios.post('/user/updateProfile', form).then(res => {
+            toast.success(res.data.message);
+            setProfile(res.data.updatedValues)
+        }).catch(err => {
+            toast.error(err.message)
+        })
+    }
+
     React.useEffect(() => {
         axios.get(`/get/user/${_id}`).then(result => {
 
@@ -53,7 +70,7 @@ const ProfilePage = (props) => {
             setProfilePicture(null);
             setDescription("");
             setContactNumber("");
-            
+
             setProfile(result.data.user)
         }).catch(error => {
             toast.error(error.message)
@@ -75,7 +92,7 @@ const ProfilePage = (props) => {
                                         value={firstName}
                                         onChange={(e) => setFirstName(e.target.value)}
                                         id="first_name" type="text"
-                                        placeholder="Enter your first name" required />
+                                        placeholder={`${profile && profile.firstName}`} />
                                 </div>
                             </div>
                             <div className="col-md-6 mb-3">
@@ -84,7 +101,8 @@ const ProfilePage = (props) => {
                                     <input className="form-control"
                                         value={lastName}
                                         onChange={(e) => setLastName(e.target.value)}
-                                        id="last_name" type="text" placeholder="Also your last name" required />
+                                        id="last_name" type="text"
+                                        placeholder={`${profile && profile.lastName}`} />
                                 </div>
                             </div>
                         </div>
@@ -94,7 +112,8 @@ const ProfilePage = (props) => {
                                     <label htmlFor="email">Email</label>
                                     <input className="form-control" id="email"
                                         value={email}
-                                        onChange={(e) => setEmail(e.target.value)} type="email" placeholder="name@company.com" required />
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        type="email" placeholder={`${profile && profile.email}`} />
                                 </div>
                             </div>
                             <div className="col-md-6 mb-3"><div className="form-group">
@@ -102,11 +121,25 @@ const ProfilePage = (props) => {
                                 <input className="form-control"
                                     value={contactNumber}
                                     onChange={(e) => setContactNumber(e.target.value)}
-                                    id="phone" type="number" placeholder="+12-345 678 910" required />
+                                    id="phone" type="number"
+                                    placeholder={`${profile && profile.contactNumber}`} />
                             </div>
                             </div>
                         </div>
-                        <h2 className="h5 my-4">Location</h2>
+
+                        <h2 className="h5 my-4">Optional</h2>
+                        <div className="row">
+                            <div className="col-sm-6">
+                                <div className="form-group">
+                                    <label htmlFor="profile">Profile Picture</label>
+                                    <input type="file" id="profile"
+                                        className="form-control"
+                                        value={profilePicture}
+                                        onChange={(e) => setProfilePicture(e.target.files[0])} />
+
+                                </div>
+                            </div>
+                        </div>
                         <div className="row">
                             <div className="col-sm-3 mb-3">
                                 <div className="form-group">
@@ -114,7 +147,7 @@ const ProfilePage = (props) => {
                                     <input className="form-control"
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
-                                        id="title" type="text" placeholder="Enter your post" required />
+                                        id="title" type="text" placeholder={`${profile && profile.title}`} />
                                 </div>
                             </div>
                             <div className="col-sm-9 mb-3">
@@ -123,7 +156,7 @@ const ProfilePage = (props) => {
                                     <textarea className="form-control" id="description"
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
-                                        placeholder="Je suis developpeur web et mobile" required />
+                                        placeholder={`${profile && profile.description}`} />
                                 </div>
                             </div>
                         </div>
@@ -145,7 +178,7 @@ const ProfilePage = (props) => {
                                     <input className="form-control"
                                         value={username}
                                         onChange={(e) => setUsername(e.target.value)}
-                                        id="username" type="text" placeholder="Username" required />
+                                        id="username" type="text" placeholder={`${profile && profile.username}`} />
                                 </div>
                             </div>
                         </div>
@@ -156,41 +189,85 @@ const ProfilePage = (props) => {
                 </div>
                 <div className="card card-body shadow-sm mb-4 mb-lg-0">
                     <h2 className="h5 mb-4">Alerts &amp; Notifications</h2>
+                    <form onSubmit={changePassword}>
+                        <div className="row">
+
+                            <div className="col-md-6 mb-3">
+                                <div className="form-group">
+                                    <label htmlFor="email-pass">Email</label>
+                                    <input className="form-control" id="email-pass"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        type="email" placeholder={`${profile && profile.email}`} />
+                                </div>
+                            </div>
+
+                            <div className="col-md-6 mb-3">
+                                <div className="form-group">
+                                    <label htmlFor="currentPass">Current Password</label>
+                                    <input className="form-control"
+                                        value={currentPass}
+                                        onChange={(e) => setCurrentPass(e.target.value)}
+                                        id="currentPass" type="password"
+                                        placeholder="Enter your current Password" />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md-6 mb-3">
+                                <div className="form-group">
+                                    <label htmlFor="currentPass">New Password</label>
+                                    <input className="form-control"
+                                        value={newPass}
+                                        onChange={(e) => setNewPass(e.target.value)}
+                                        id="currentPass" type="password"
+                                        placeholder="Enter your new Password" />
+                                </div>
+                            </div>
+                            <div className="col-md-6 mb-3">
+                                <div className="form-group">
+                                    <label htmlFor="currentPass">Retype New Password</label>
+                                    <input className="form-control"
+                                        value={newPassAgain}
+                                        onChange={(e) => setNewPassAgain(e.target.value)}
+                                        id="currentPass" type="password"
+                                        placeholder="Repeat your new Password" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                     <ul className="list-group list-group-flush">
                         <li className="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
                             <div>
-                                <h3 className="h6 mb-1">Company News</h3>
-                                <p className="small pe-4">Get Rocket news, announcements, and product updates</p>
+                                <h3 className="h6 mb-1">Company Info</h3>
+                                <p className="small pe-4">{profile && profile.company.company}</p>
                             </div>
                             <div>
-                                <div className="form-check form-switch">
-                                    <input className="form-check-input" type="checkbox" id="user-notification-1" />
-                                    <label className="form-check-label" htmlFor="user-notification-1" />
-                                </div>
+                                <span className="fas fa-check-circle text-success me-2" />
                             </div>
                         </li>
                         <li className="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
                             <div>
-                                <h3 className="h6 mb-1">Account Activity</h3>
-                                <p className="small pe-4">Get important notifications about you or activity you've missed</p>
-                            </div>
-                            <div>
-                                <div className="form-check form-switch">
-                                    <input className="form-check-input" type="checkbox" id="user-notification-2" defaultChecked="checked" />
-                                    <label className="form-check-label" htmlFor="user-notification-2" />
-                                </div>
+                                <h3 className="h6 mb-1">First Name and Last Name</h3>
+                                <p className="small pe-4">{profile && profile.firstName} {profile && profile.lastName}</p>
                             </div>
                         </li>
                         <li className="list-group-item d-flex align-items-center justify-content-between px-0">
                             <div>
-                                <h3 className="h6 mb-1">Meetups Near You</h3>
-                                <p className="small pe-4">Get an email when a Dribbble Meetup is posted close to my location</p>
+                                <h3 className="h6 mb-1">Email</h3>
+                                <p className="small pe-4">{profile && profile.email} </p>
                             </div>
+                        </li>
+                        <li className="list-group-item d-flex align-items-center justify-content-between px-0">
                             <div>
-                                <div className="form-check form-switch">
-                                    <input className="form-check-input" type="checkbox" id="user-notification-3" defaultChecked="checked" />
-                                    <label className="form-check-label" htmlFor="user-notification-3" />
-                                </div>
+                                <h3 className="h6 mb-1">Username</h3>
+                                <p className="small pe-4">{profile && profile.username} </p>
+                            </div>
+                        </li>
+                        <li className="list-group-item d-flex align-items-center justify-content-between px-0">
+                            <div>
+                                <h3 className="h6 mb-1">Description</h3>
+                                <p className="small pe-4">{profile && profile.description} </p>
                             </div>
                         </li>
                     </ul>
@@ -209,35 +286,9 @@ const ProfilePage = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-12">
-                        <div className="card card-body shadow-sm mb-4">
-                            <h2 className="h5 mb-4">Select profile photo</h2>
-                            <div className="d-flex align-items-center">
-                                <div className="me-3">
-                                    <div className="user-avatar xl-avatar">
-                                        <img className="rounded" src={avatar} alt="change avatar" />
-                                    </div>
-                                </div>
-                                <div className="file-field">
-                                    <div className="d-flex justify-content-xl-center ms-xl-3">
-                                        <div className="d-flex">
-                                            <span className="icon icon-md">
-                                                <span className="fas fa-paperclip me-3" />
-                                            </span>
-                                            <input type="file" value={profilePicture} onChange={(e) => setProfilePicture(e.target.files[0])} />
-                                            <div className="d-md-block text-left">
-                                                <div className="fw-normal text-dark mb-1">Choose Image</div>
-                                                <div className="text-gray small">JPG, GIF or PNG. Max size of 800K</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
-        </div>
+        </div >
 
     )
 }

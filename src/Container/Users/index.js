@@ -7,32 +7,36 @@ const Users = () => {
     const auth = useSelector(state => state.auth);
 
     const [users, setUsers] = React.useState(null);
+    const [choice, setChoice] = React.useState('');
 
     React.useEffect(() => {
-        axios.get("/get/users").then(res => {
+        if (choice === "client") {
+            axios.get(`/get/clients`).then(res => {
+                setUsers(res.data.clients);
+            }).catch(error => {
+                console.log(error.message);
+            });
+        }
+        axios.get(`/get/users?type=${choice}`).then(res => {
             setUsers(res.data.users);
             console.log(res.data.users);
         }).catch(error => {
             console.log(error.message);
         });
-    }, [])
+    }, [choice])
 
     return (
         <>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
                 <div className="d-block mb-4 mb-md-0">
-                    <nav aria-label="breadcrumb" className="d-none d-md-inline-block"><ol className="breadcrumb breadcrumb-dark breadcrumb-transparent"><li className="breadcrumb-item"><a href="#"><span className="fas fa-home" /></a></li><li className="breadcrumb-item"><a href="#">Volt</a></li><li className="breadcrumb-item active" aria-current="page">Users List</li></ol>
+                    <nav aria-label="breadcrumb" className="d-none d-md-inline-block">
+                        <ol className="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                            <li className="breadcrumb-item"><a href="#"><span className="fas fa-home" /></a>
+                            </li>
+                            <li className="breadcrumb-item"><a href="#">SMS-MANAGER</a></li>
+                            <li className="breadcrumb-item active" aria-current="page">Users List</li></ol>
                     </nav>
-                    <h2 className="h4">Users List</h2><p className="mb-0">Your web analytics dashboard template.</p>
-                </div>
-                <div className="btn-toolbar mb-2 mb-md-0">
-                    <a href="#" className="btn btn-sm btn-dark">
-                        <span className="fas fa-plus me-2" /> New User
-                    </a>
-                    <div className="btn-group ms-2 ms-lg-3">
-                        <button type="button" className="btn btn-sm btn-outline-primary">Share</button>
-                        <button type="button" className="btn btn-sm btn-outline-primary">Export</button>
-                    </div>
+
                 </div>
             </div>
             <div className="table-settings mb-4">
@@ -44,58 +48,18 @@ const Users = () => {
                             </span>
                             <input type="text" className="form-control" placeholder="Search" />
                         </div>
-                        <select className="form-select w-25" aria-label="Message select example 2">
-                            <option selected="selected">All</option>
-                            <option value={1}>Active</option>
-                            <option value={2}>Inactive</option>
-                            <option value={3}>Pending</option>
-                            <option value={3}>Canceled</option>
-                        </select>
-                    </div>
-                    <div className="col-3 col-lg-8 text-right">
-                        <div className="btn-group me-1">
-                            <button className="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span className="icon icon-sm icon-gray pt-1">
-                                    <span className="fas fa-sliders-h" />
-                                </span>
-                                <span className="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <div className="dropdown-menu dropdown-menu-end pb-0">
-                                <span className="small ps-3 fw-bold text-dark">Show</span>
-                                <a className="dropdown-item d-flex fw-bold" href="#">10
-                                        <span className="icon icon-small ms-auto">
-                                        <span className="fas fa-check" />
-                                    </span>
-                                </a>
-                                <a className="dropdown-item fw-bold" href="#">20</a>
-                                <a className="dropdown-item fw-bold rounded-bottom" href="#">30</a>
-                            </div>
-                        </div>
-                        <div className="btn-group">
-                            <button className="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span className="icon icon-sm icon-gray pt-1"><span className="fas fa-cog" /> </span><span className="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <div className="dropdown-menu dropdown-menu-xs dropdown-menu-end pb-0">
-                                <span className="small ps-3 fw-bold text-dark">Show</span>
-                                <a className="dropdown-item d-flex fw-bold" href="#">10
-                                        <span className="icon icon-small ms-auto">
-                                        <span className="fas fa-check" />
-                                    </span>
-                                </a>
-                                <a className="dropdown-item fw-bold" href="#">20</a>
-                                <a className="dropdown-item fw-bold rounded-bottom" href="#">30</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
             <div className="card card-body shadow-sm table-wrapper table-responsive">
                 <div className="d-flex mb-3">
-                    <select className="form-select fmxw-150" aria-label="Message select example">
-                        <option selected="selected">Bulk Action</option>
-                        <option value={1}>Send Email</option>
-                        <option value={2}>Change Group</option>
-                        <option value={3}>Delete User</option></select>
+                    <select className="form-select fmxw-150" value={choice}
+                        onChange={(e) => setChoice(e.target.value)}
+                        aria-label="Message select example">
+                        <option selected="selected">All Users</option>
+                        <option value={"admin"}>Admins</option>
+                        <option value={"client"}>Clients</option>
+                        <option value={"customer"}>Customers</option></select>
                     <button className="btn btn-sm px-3 btn-secondary ms-3">Apply</button>
                 </div>
                 <table className="table user-table table-hover align-items-center">
@@ -108,7 +72,9 @@ const Users = () => {
                                 </div>
                             </th>
                             <th className="border-bottom">Name</th>
-                            <th className="border-bottom">Date Created</th><th className="border-bottom">Verified</th><th className="border-bottom">Status</th>
+                            <th className="border-bottom">Date Created</th>
+                            <th className="border-bottom">Verified</th>
+                            <th className="border-bottom">Status</th>
                             <th className="border-bottom">Action</th>
                         </tr>
                     </thead>
@@ -139,7 +105,7 @@ const Users = () => {
                                     <td>
                                         <span className="fw-normal">
                                             <span className="fas fa-check-circle text-success me-2" />{user.role}
-                                    </span>
+                                        </span>
                                     </td>
                                     <td>
                                         <span className="fw-normal text-success">Active</span>
