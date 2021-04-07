@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { axiosInstance as axios } from "../../helpers/axios";
 import { toast, ToastContainer } from "react-toastify";
-import avatar from "../../assets/img/team/profile-picture-3.jpg";
 
 const CreateUser = (props) => {
 
@@ -13,7 +12,7 @@ const CreateUser = (props) => {
     const [email, setEmail] = React.useState('');
     const [username, setUsername] = React.useState('');
     const [role, setRole] = React.useState('');
-    const [profilePicture, setProfilePicture] = React.useState('');
+    const [profilePicture, setProfilePicture] = React.useState(null);
     const [title, setTitle] = React.useState('');
     const [description, setDescription] = React.useState('');
     const [contactNumber, setContactNumber] = React.useState(null);
@@ -24,15 +23,11 @@ const CreateUser = (props) => {
         e.preventDefault();
 
         if (props.location.search.split("?")[1].split("=")[1] === "client") {
-            const form = new FormData();
-
             const company = auth.user.company;
+            const form = {
+                firstName, lastName, contactNumber, email, company
+            };
 
-            firstName && form.append("firstName", firstName)
-            lastName && form.append("lastName", lastName)
-            email && form.append("email", email)
-            contactNumber && form.append("contactNumber", contactNumber);
-            form.append("company", company);
             axios.post('/create/client', form).then(result => {
                 toast.sucess(result.Message)
             }).catch(error => {
@@ -109,18 +104,18 @@ const CreateUser = (props) => {
                                             <input className="form-control"
                                                 value={contactNumber}
                                                 onChange={(e) => setContactNumber(e.target.value)}
-                                                id="phone" type="number" placeholder="+12-345 678 910" />
+                                                id="phone" type="number" placeholder="+243-345 678 910" />
                                         </div>
                                     </div>
 
                                 ) : (
                                     <div className="col-md-6 mb-3">
                                         <div className="form-group">
-                                            <label htmlFor="phone">Phone</label>
+                                            <label htmlFor="phone">Password</label>
                                             <input className="form-control"
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
-                                                id="phone" type="number" placeholder="Your password here" />
+                                                id="password" type="number" placeholder="Your password here" />
                                         </div>
                                     </div>
                                 )
@@ -129,18 +124,19 @@ const CreateUser = (props) => {
 
 
                         </div>
+                        <h2 className="h5 my-4">Optional</h2>
                         <div className="row">
                             <div className="col-sm-6">
                                 <div className="form-group">
                                     <label htmlFor="profile">Profile Picture</label>
-                                    <input className="form-control" type="file" id="profile"
+                                    <input type="file" id="profile"
+                                        className="form-control"
                                         value={profilePicture}
                                         onChange={(e) => setProfilePicture(e.target.files[0])} />
 
                                 </div>
                             </div>
                         </div>
-                        <h2 className="h5 my-4">Location</h2>
                         <div className="row">
                             <div className="col-sm-3 mb-3">
                                 <div className="form-group">
